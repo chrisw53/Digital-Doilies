@@ -8,7 +8,7 @@ public class Gallery extends JPanel {
     private JPanel galleryContainer = new JPanel();
 
     Gallery(int width) {
-        setPreferredSize(new Dimension(width, 140));
+        setPreferredSize(new Dimension(width, 150));
         setLayout(new BorderLayout());
 
         galleryContainer.setLayout(new FlowLayout());
@@ -61,5 +61,9 @@ public class Gallery extends JPanel {
         }
 
         myImages.removeAll(toRemove);
+    }
+
+    int getGallerySize() {
+        return this.myImages.size();
     }
 }

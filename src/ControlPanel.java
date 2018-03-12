@@ -28,18 +28,28 @@ class ControlPanel extends JPanel {
         JButton save = new JButton("Save");
         save.addActionListener(
                 (ActionEvent e) -> {
-                    GalleryPiece newImg = new GalleryPiece(
-                            myCanvas.getHistory(),
-                            100,
-                            100,
-                            myCanvas.getSectors(),
-                            myCanvas.getShowLine()
-                    );
+                    if (myGallery.getGallerySize() > 11) {
+                        JOptionPane.showMessageDialog(
+                                new JFrame(),
+                                "Max size (12) reached! Please remove one.",
+                                "Save Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    } else {
+                        GalleryPiece newImg = new GalleryPiece(
+                                myCanvas.getHistory(),
+                                100,
+                                100,
+                                myCanvas.getSectors(),
+                                myCanvas.getShowLine()
+                        );
 
-                    myGallery.addNewImage(newImg);
-                    myCanvas.reset();
-                    validate();
-                    repaint();
+                        myGallery.addNewImage(newImg);
+                        myCanvas.reset();
+
+                        validate();
+                        repaint();
+                    }
                 }
         );
 

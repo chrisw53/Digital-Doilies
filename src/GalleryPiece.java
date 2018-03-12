@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
@@ -31,6 +32,13 @@ public class GalleryPiece extends JPanel{
         );
         strokeInstructions.addAll(history);
         this.sectors = sectors;
+
+        updateCanvas(new MyStroke(
+                new Path2D.Double(),
+                new Color(255, 255, 255, 0),
+                0,
+                false
+        ));
 
         for (MyStroke myStroke : strokeInstructions) {
             updateCanvas(myStroke);
