@@ -15,6 +15,15 @@ public class GalleryPiece extends JPanel{
     private boolean showLine;
     private boolean isSelected = false;
 
+    /**
+     * Constructor for individual gallery pieces
+     * @param history Stack containing all the strokes made on that painting
+     * @param width Integer representing the width of the gallery piece
+     * @param height Integer representing the height of the gallery piece
+     * @param sectors Integer representing the number of sectors
+     * @param showLine Boolean representing whether the sectors lines should
+     *                 be drawn
+     */
     GalleryPiece(
             Stack<MyStroke> history,
             int width,
@@ -25,14 +34,17 @@ public class GalleryPiece extends JPanel{
         this.showLine = showLine;
         setBackground(Color.BLACK);
         setLayout(new FlowLayout());
+        // Initializes a BufferedImage for the strokes to be drawn on
         canvas = new BufferedImage(
                 600,
                 600,
                 BufferedImage.TYPE_INT_ARGB
         );
+        // Adds everything in the history stack into the class variable ArrayList
         strokeInstructions.addAll(history);
         this.sectors = sectors;
 
+        // Placeholder updateCanvas call to draw blank canvas with sector lines
         updateCanvas(new MyStroke(
                 new Path2D.Double(),
                 new Color(255, 255, 255, 0),
@@ -40,10 +52,15 @@ public class GalleryPiece extends JPanel{
                 false
         ));
 
+        // Draws all the strokes inside strokeInstruction
         for (MyStroke myStroke : strokeInstructions) {
             updateCanvas(myStroke);
         }
 
+        /*
+        Wraps the BufferedImage inside a JLabel with the intended
+        width and height
+        */
         JLabel canvasWrapper = new JLabel(new ImageIcon(
                 canvas.getScaledInstance(
                     width,
@@ -54,6 +71,7 @@ public class GalleryPiece extends JPanel{
 
         add(canvasWrapper);
 
+        // Set up the listeners for each image to be selected
         canvasWrapper.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 isSelected = !isSelected;
@@ -66,6 +84,10 @@ public class GalleryPiece extends JPanel{
         });
     }
 
+    /**
+     * Handles repainting the selected images onto a larger canvas
+     * in a new dialog window
+     */
     void individualPicture() {
         JDialog myWindow = new JDialog();
         myWindow.setTitle("Your Image");
@@ -83,6 +105,13 @@ public class GalleryPiece extends JPanel{
         myWindow.setVisible(true);
     }
 
+
+    /**
+     * Handles drawing a single stroke and all the sector lines
+     * if showLine is true
+     * @param myStroke A MyStroke object that contains all the info
+     *                 required to paint a stroke.
+     */
     private void updateCanvas(MyStroke myStroke) {
         Graphics2D g = (Graphics2D) canvas.getGraphics();
         g.setRenderingHint(
@@ -94,6 +123,7 @@ public class GalleryPiece extends JPanel{
         double rotateAngle = 0;
 
         for (int i = 0; i < this.sectors; i++) {
+            // Initializes the sector line
             Line2D sectorLine = new Line2D.Double(
                     300,
                     300,
@@ -101,20 +131,26 @@ public class GalleryPiece extends JPanel{
                     0
             );
 
-
             AffineTransform at = AffineTransform.getRotateInstance(
                     Math.toRadians(rotateAngle),
                     300,
                     300
             );
 
+            /*
+            If showLine returns true, this logic rotates the Line2D
+            initialized up top around the canvas
+            */
             if (this.showLine) {
+                // Sets the color to white and stroke width to 1.0
                 g.setPaint(Color.WHITE);
                 g.setStroke(new BasicStroke(1.0f));
                 g.draw(at.createTransformedShape(sectorLine));
+                // Resets the paint color
                 g.setPaint(myStroke.getPenColor());
             }
 
+            // Resets the stroke width
             g.setStroke(new BasicStroke(
                     (float) myStroke.getPenSize(),
                     BasicStroke.CAP_ROUND,
@@ -123,6 +159,7 @@ public class GalleryPiece extends JPanel{
 
             g.draw(at.createTransformedShape(myStroke.getStroke()));
 
+            // If isReflected is true, this handles the logic to print the mirror
             if (myStroke.getIsReflected()) {
                 at.translate(600, 0);
                 at.scale(-1, 1);
@@ -137,6 +174,7 @@ public class GalleryPiece extends JPanel{
         repaint();
     }
 
+    // Getter function for isSelected
     boolean getIsSelected() {
         return isSelected;
     }

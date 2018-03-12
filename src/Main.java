@@ -7,8 +7,11 @@ public class Main extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Initializes Digital Doilies Windows
+     */
     public static void main(String[] args) {
-        Main myMainFrame = new Main("Digital Dolly");
+        Main myMainFrame = new Main("Digital Doilies");
         ControlPanel myControlPanel = new ControlPanel();
         JPanel contentContainer = new JPanel();
         contentContainer.setLayout(new FlowLayout());
